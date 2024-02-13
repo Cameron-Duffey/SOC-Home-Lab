@@ -3,13 +3,34 @@ Creating a virtualize SOC home lab using VMware, SecurityOnion, pfSense, Windows
 
 First I downloaded and ran through the install wizard for VMware and collected all the ISO files required.
 
+# Downloads
+[VMware Player](https://www.vmware.com/products/workstation-player/workstation-player-evaluation.html)
+
+[pfSense ISO](https://www.pfsense.org/download/)
+
+[Kali ISO](https://www.kali.org/get-kali/#kali-virtual-machines)
+
+[Security Onion](https://github.com/Security-Onion-Solutions/securityonion/blob/master/VERIFY_ISO.md)
+
+[Ubuntu Desktop ISO](https://ubuntu.com/download/desktop)
+
+[Ubuntu Server ISO](https://ubuntu.com/download/server)
+
+[Windows Server 2019 ISO](https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2019)
+
+[Windows 10 ISO](https://www.microsoft.com/en-us/evalcenter/evaluate-windows-10-enterprise)
+
+[Splunk Trial](https://www.splunk.com/en_us/download/splunk-cloud.html)
+
+You don't need to download Splunk separately you can download it from the Ubuntu server as seen later in the lab.
+
 # pfSense Setup
 pfSense is a firewall solution based on FreeBSD that will be managed via a GUI on our Kali linux machine that will be configured later in the lab.
 
 Open VMware and click "Create a New Virtual Machine."
 Click "Browse" and find the folder where the PfSense ISO is stored.
 
-<img src="https://i.imgur.com/tl9FPaq.png" height=300px width=300px>
+<img src="https://i.imgur.com/tl9FPaq.png" height=500px width=500px>
 
 Click Next
 Here you can rename the virtual machine I chose to name this instance "pfSense"
@@ -17,7 +38,7 @@ Click Next
 
 Here you'll be able to allocate the amount of disk space you would like the VM to have. 20GB is enough for this instance.
 
-<img src="https://i.imgur.com/PtkXfQN.png" height=300px width=300px>
+<img src="https://i.imgur.com/PtkXfQN.png" height=500px width=500px>
 
 Be sure to choose the "Split virtual disk into multiple files" option.
 
@@ -25,19 +46,19 @@ Click Next
 
 Now click on the "Customize Hardware" option. Here you'll increase the memory to at least 2GB. Also add five network adapters, choosing "Custom" for each of them and labling them VMnet2 through VMnet6.
 
-<img src="https://i.imgur.com/fiuq181.png" height=300px width=300px>
+<img src="https://i.imgur.com/fiuq181.png" height=500px width=500px>
 
 After this, the pfSense machine will start up and you will be greeted with a setup prompt. Accept all defaults and pfSense will reboot
 
-<img src="https://i.imgur.com/RvkUbzn.png" height=300px width=300px>
-<img src="https://i.imgur.com/xVqBeOm.png" height=300px width=300px>
-<img src="https://i.imgur.com/cA8grBk.png" height=300px width=300px>
-<img src="https://i.imgur.com/X4Q3QlT.png" height=300px width=300px>
-<img src="https://i.imgur.com/2eANBEB.png" height=300px width=300px>
+<img src="https://i.imgur.com/RvkUbzn.png" height=500px width=500px>
+<img src="https://i.imgur.com/xVqBeOm.png" height=500px width=500px>
+<img src="https://i.imgur.com/cA8grBk.png" height=500px width=500px>
+<img src="https://i.imgur.com/X4Q3QlT.png" height=500px width=500px>
+<img src="https://i.imgur.com/2eANBEB.png" height=500px width=500px>
 
 Once you proceed through the installation pfSense will reboot and you'll be greeted with a screen like this
 
-<img src="https://i.imgur.com/eJ5cTRv.png" height=300px width=300px>
+<img src="https://i.imgur.com/eJ5cTRv.png" height=500px width=500px>
 
 We'll choose option 1 to begin assinging interfaces.
 
@@ -45,32 +66,32 @@ We'll choose option 1 to begin assinging interfaces.
 Enter em0, em1, em2, em3, em4, em5 for each of the following questions
 "Do you want to proceed? [y:n]: y"
 
-<img src="https://i.imgur.com/LxrshQm.png" height=300px width=300px>
+<img src="https://i.imgur.com/LxrshQm.png" height=500px width=500px>
 
 From here enter option 2 to set IP addresses
 
-<img src="https://i.imgur.com/qZsRcBO.png" height=300px width=300px>
+<img src="https://i.imgur.com/qZsRcBO.png" height=500px width=500px>
 
 Start by configuring the LAN interface, number 2
 Set the IP address as 192.168.1.1. This will be used to access the pfSense webGUI via the Kali machine that will be configured later.
 
 Use the configuration betlow for the LAN interface
 
-<img src="https://i.imgur.com/FTZD9fM.png" height=300px width=300px>
+<img src="https://i.imgur.com/FTZD9fM.png" height=500px width=500px>
 
 Use the configuration below for interface OPT1
 
-<img src="https://i.imgur.com/9bqkEzw.png" height=300px width=300px>
+<img src="https://i.imgur.com/9bqkEzw.png" height=500px width=500px>
 
 Use the configuration below for interface OPT2
 
-<img src="https://i.imgur.com/FHzwtvh.png" height=300px width=300px>
+<img src="https://i.imgur.com/FHzwtvh.png" height=500px width=500px>
 
 Leave the OPT3 interface without an IP address. This interface is going to have the span port traffic that Security Onion will be monitoring
 
 Use the configuration below for interface OPT4
 
-<img src="https://i.imgur.com/8yaxTgl.png" height=300px width=300px>
+<img src="https://i.imgur.com/8yaxTgl.png" height=500px width=500px>
 
 This is the end of the pfSense configuration for now. We'll continue via the webGUI after the Kali machine is set up
 
@@ -80,13 +101,13 @@ For this setup we'll use a premade Kali VM file. All you need to do is click on 
 
 Before using the Kali machine we do need to change the network adapter to Vmnet2 and increase the memory to 4GB.
 
-<img src="https://i.imgur.com/TOUvWcW.png" height=300px width=300px>
+<img src="https://i.imgur.com/TOUvWcW.png" height=500px width=500px>
 
 From here power on the VM and log in with the default credentials of "Kali" for both the username and password
 
 Once logged in open the terminal and use the "passwd" command to change the password to something more secure
 
-<img src="https://i.imgur.com/baxy8pU.png" height=300px width=450px>
+<img src="https://i.imgur.com/baxy8pU.png" height=500px width=650px>
 
 From here open a web browser on the Kali machine and navigate to the pfSense WebConfigurator located at 192.168.1.1
 
@@ -102,7 +123,7 @@ You'll load into the "Wizard/pfSense Setup/" page.
 Click Next until you get to step 2 of 9
 Add 8.8.8.8 as your primary DNS server and 4.4.4.4 as your secondary DNS server
 
-<img src="https://i.imgur.com/7JAfEPy.png" height=300px width=300px>
+<img src="https://i.imgur.com/7JAfEPy.png" height=500px width=500px>
 
 Click Next
 
@@ -277,12 +298,89 @@ On the Ubuntu desktop open a web browser and navigate to the Security Onion web 
 <img src="https://i.imgur.com/vOuCznb.png" height=500px width=1500px>
 
 
-
-
-
-
-
 # Windows AD Setup
-aaaaaa
+Using a copy of Windows Server 2019 we'll create an Active Directory(AD) domain with the server as the Domain Controller and two Windows 10 machines as users. 
+
+For all Windows machines in this lab we'll not be using a product key so you can simply press Next when prompted for one.
+
+For all Windows machines make sure to go to "Edit virtual machine settings: and remove the Floppy drive after they have been installed
+
+Add the end of the installation change the Network Adapter to Vmnet3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Windows User Setup
-aaaaa
+Before setting up our user accounts we must make sure our DHCP Server for our AD is set up. To do this load into the Kali machine and go to the pfSense webGUI.
+
+Go to Services > DHCP Server > VICTIMSNETWORK > DNS Server and set it to the IP address of your domain controller, 192.168.2.4 for me.
+
+Go to Services > DHCP Server > VICTIMSNETWORK > Other Options > Domain Name and set it to the name of your domain controller, SOC.lab for me.
+
+Go to the bottom of the page to save and then hit Apply at the top of the page.
+
+<img src="https://i.imgur.com/2VqY0HW.png" height=500px width=500px>
+
+Now to start configuring the user machines, create a new VM, use the Windows 10 Enterprise ISO, enter the name of the user account, and then leave all the defaults the same except make sure the Network Adapter is set to Vmnet3
+
+<img src="https://i.imgur.com/z68ewNF.png" height=500px width=500px>
+
+Uncheck all the privacy settings for the device
+
+<img src="https://i.imgur.com/McXVcrr.png" height=500px width=500px>
+
+Once the VM is booted up you can go to the search bar and type in PC name which will bring you to the "About" section where you can change the name of the PC. I changed the first user PC name to "Cameron" so that it will be easier to track in the AD.
+
+After that's all done go back to the search bar and type in "Domain." This will bring up the "Acess Work and School" option.
+
+Click on "Connect" > "Join this Device to Local Active Directory Domain"
+
+Type in the name of your AD, SOC.lab in my case
+
+<img src="https://i.imgur.com/Qsn1RPH.png" height=500px width=500px>
+
+You'll then be prompted for a username and password use "Administrator" and the admin password you use to get into the AD.
+
+<img src="https://i.imgur.com/iIoUyyh.png" height=500px width=500px>
+
+Click "Skip" and Restart the PC
+
+Once rebooted you can see that the computer is part of the AD
+
+<img src="https://i.imgur.com/TtTMi7I.png" height=500px width=500px>
+
+You can see this from the AD as well by going to "Active Directory Users and Computers"
+
+<img src="https://i.imgur.com/caAN04v.png" height=500px width=500px>
+
+Now just repeat this process for the other User you created when you set up the Active Directory machine.
